@@ -8,12 +8,12 @@ ColumnLimit: 120
 
 # Braces
 BreakBeforeBraces: Attach
-AllowShortFunctionsOnASingleLIine: Empty
+AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
 
 # Alignment
-AlignConsecutiveAssignments: Enabled
+AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignTrailingComments: Always
 
