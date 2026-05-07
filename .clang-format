@@ -16,6 +16,8 @@ AllowShortLoopsOnASingleLine: false
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignTrailingComments: Always
+AccessModifierOffset: -4
+IndentAccessModifiers: false
 
 # Pointer and Reference
 PointerAlignment: Left

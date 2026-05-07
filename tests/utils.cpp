@@ -2,20 +2,16 @@
 
 #include <random>
 
+std::random_device rd;
+std::mt19937 engine(rd());
+
 size_t generate_random_size_t(size_t max) {
-	std::random_device rd;
-	std::mt19937 engine(rd());
-
 	std::uniform_int_distribution<size_t> dist(0, max);
-
 	return dist(engine);
 }
 
 const char* generate_random_cstr(size_t length, size_t max_char) {
 	assert(max_char <= 255);
-
-	std::random_device rd;
-	std::mt19937 engine(rd());
 
 	// Define a uniform integer distribution to get a random index
 	std::uniform_int_distribution<size_t> dist(1, max_char);

@@ -34,7 +34,7 @@ TEST(strcpy, basic_test) {
 	ASSERT_STREQ(cpystrs[3], strs[3]);
 
 	strcpy(strs[4],
-	       "Encapsulated in their own world, the deaf couldn't help but look at the dancers as if they were maniacs");
+	       "Encapsulated in their own world, the deaf couldn't help but look at the dancers as if they were crazy");
 	nstl::strcpy(cpystrs[4], strs[4]);
 	ASSERT_STREQ(cpystrs[4], strs[4]);
 
