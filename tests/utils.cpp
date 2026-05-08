@@ -10,7 +10,7 @@ size_t generate_random_size_t(size_t max) {
 	return dist(engine);
 }
 
-const char* generate_random_cstr(size_t length, size_t max_char) {
+char* generate_random_cstr(size_t length, size_t max_char) {
 	assert(max_char <= 255);
 
 	// Define a uniform integer distribution to get a random index

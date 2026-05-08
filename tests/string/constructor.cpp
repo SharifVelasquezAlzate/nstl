@@ -30,21 +30,21 @@ TEST(string_ctr, cstring_constructor) {
 		ASSERT_STREQ(nstr.c_str(), strs[i]);
 	}
 }
-/*
+
 TEST(string_ctr, vs_std_string) {
-    const unsigned int iterations = 100;
-    for (int i = 0; i < iterations; ++i) {
-        size_t size = generate_random_size_t(10000000);
-        const char* cstr = generate_random_cstr(size, 255);
-        std::string str{cstr};
-        nstl::string nstr{cstr};
+	const unsigned int iterations = 100;
+	for (int i = 0; i < iterations; ++i) {
+		size_t size = generate_random_size_t(10000000);
+		const char* cstr = generate_random_cstr(size, 255);
+		std::string str{cstr};
+		nstl::string nstr{cstr};
 
-        ASSERT_EQ(nstr.size(), str.size());
-        ASSERT_STREQ(nstr.c_str(), str.c_str());
+		ASSERT_EQ(nstr.size(), str.size());
+		ASSERT_STREQ(nstr.c_str(), str.c_str());
 
-        delete cstr;
-    }
-}*/
+		delete[] cstr;
+	}
+}
 
 TEST(string_ctr, rand_cstr_small) {
 	for (int i = 0; i < 1000; ++i) {
@@ -52,34 +52,32 @@ TEST(string_ctr, rand_cstr_small) {
 		const char* cstr = generate_random_cstr(ogsize);
 		nstl::string nstr{cstr};
 
-		// ASSERT_STREQ(nstr.c_str(), cstr);
+		ASSERT_STREQ(nstr.c_str(), cstr);
 
-		delete cstr;
+		delete[] cstr;
 	}
 }
 
-/*
 TEST(string_ctr, rand_cstr_large) {
-    for (int i = 0; i < 1000; ++i) {
-        size_t ogsize = 24 + generate_random_size_t(100000);
-        const char* cstr = generate_random_cstr(ogsize);
-        nstl::string nstr {cstr};
+	for (int i = 0; i < 1000; ++i) {
+		size_t ogsize = 24 + generate_random_size_t(100000);
+		const char* cstr = generate_random_cstr(ogsize);
+		nstl::string nstr{cstr};
 
-        ASSERT_STREQ(nstr.c_str(), cstr);
+		ASSERT_STREQ(nstr.c_str(), cstr);
 
-        delete cstr;
-    }
+		delete[] cstr;
+	}
 }
 
 TEST(string_ctr, rand_cstr_all) {
-    for (int i = 0; i < 1000; ++i) {
-        size_t ogsize = generate_random_size_t(1000000);
-        const char* cstr = generate_random_cstr(ogsize);
-        nstl::string nstr {cstr};
+	for (int i = 0; i < 1000; ++i) {
+		size_t ogsize = generate_random_size_t(1000000);
+		const char* cstr = generate_random_cstr(ogsize);
+		nstl::string nstr{cstr};
 
-        ASSERT_STREQ(nstr.c_str(), cstr);
+		ASSERT_STREQ(nstr.c_str(), cstr);
 
-        delete cstr;
-    }
+		delete[] cstr;
+	}
 }
-*/

@@ -105,4 +105,43 @@ void strcpy(char* dest, const char* src) {
 	}
 }
 
+void memcpy(void* dest, const void* src, size_t num_bytes) {
+	if (num_bytes <= 0) {
+		return;
+	}
+
+	char* cdest = reinterpret_cast<char*>(dest);
+	const char* csrc = reinterpret_cast<const char*>(src);
+
+	size_t bytes_cpd = 0;
+
+	// Advance pointer until long aligned
+	while ((uintptr_t)(csrc + bytes_cpd) % sizeof(unsigned long) != 0 && bytes_cpd < num_bytes) {
+		cdest[bytes_cpd] = csrc[bytes_cpd];
+		++bytes_cpd;
+	}
+
+	if (bytes_cpd == num_bytes) {
+		return;
+	}
+
+	unsigned long* ldest = reinterpret_cast<unsigned long*>(cdest + bytes_cpd);
+	const unsigned long* lsrc = reinterpret_cast<const unsigned long*>(csrc + bytes_cpd);
+
+	size_t num_hops = (num_bytes - bytes_cpd) / sizeof(unsigned long);
+	for (size_t i = 0; i < num_hops; ++i) {
+		ldest[i] = lsrc[i];
+		bytes_cpd += sizeof(unsigned long);
+	}
+
+	if (bytes_cpd == num_bytes) {
+		return;
+	}
+
+	// num_bytes was not long aligned, so copy the remaining bytes
+	for (size_t i = bytes_cpd; i < num_bytes; ++i) {
+		cdest[i] = csrc[i];
+	}
+}
+
 }  // namespace nstl

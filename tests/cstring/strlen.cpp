@@ -60,7 +60,7 @@ TEST(strlen, ascii_characters) {
 		const char* str = generate_random_cstr(size, 127);
 		ASSERT_EQ(nstl::strlen(str), size) << "str[actual] = " << str[size] << " " << (str[size] == '\0') << " | "
 		                                   << str[nstl::strlen(str)] << " " << (str[nstl::strlen(str)] == '\0');
-		delete str;
+		delete[] str;
 	}
 }
 
@@ -70,6 +70,6 @@ TEST(strlen, vs_std_strlen) {
 		size_t size = generate_random_size_t(10000000);
 		const char* str = generate_random_cstr(size, 255);
 		ASSERT_EQ(nstl::strlen(str), strlen(str));
-		delete str;
+		delete[] str;
 	}
 }

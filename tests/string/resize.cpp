@@ -42,7 +42,7 @@ TEST(string_resize, smaller_than_curr_size) {
 		// Check no relocation happened
 		ASSERT_EQ(nstr.c_str(), prev_data);
 
-		delete cstr;
+		delete[] cstr;
 	}
 }
 
@@ -62,7 +62,7 @@ TEST(string_resize, bigger_than_curr_size) {
 
 		ASSERT_TRUE(nstr.capacity() > ogsize);
 
-		delete cstr;
+		delete[] cstr;
 	}
 }
 

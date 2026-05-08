@@ -63,7 +63,7 @@ public:
 			return;
 		}
 
-		delete ls.data;
+		delete[] ls.data;
 	}
 
 	void resize(size_t nsize) {
@@ -94,7 +94,7 @@ public:
 			char* new_data = new char[capacity() + 1];
 			memcpy(new_data, ls.data, old_size + 1);
 
-			delete ls.data;
+			delete[] ls.data;
 			ls.data = new_data;
 		}
 
@@ -130,7 +130,7 @@ public:
 		char* new_data = new char[capacity() + 1];
 		memcpy(new_data, ls.data, curr_size + 1);
 
-		delete ls.data;
+		delete[] ls.data;
 		ls.data = new_data;
 	}
 

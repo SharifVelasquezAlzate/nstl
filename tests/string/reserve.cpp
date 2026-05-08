@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <cstddef>
 #include <cstring>
-#include <iostream>
 #include <nstl/string.hpp>
 
 #include "utils.h"
@@ -35,7 +34,7 @@ TEST(string_resize, smaller_than_curr_capacity) {
 		// Check that the size didn't change
 		ASSERT_EQ(nstr.size(), ogsize);
 
-		delete cstr;
+		delete[] cstr;
 	}
 }
 

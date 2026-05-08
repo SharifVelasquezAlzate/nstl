@@ -43,8 +43,8 @@ TEST(strcpy, basic_test) {
 	ASSERT_STREQ(cpystrs[5], strs[5]);
 
 	for (int i = 0; i < 15; ++i) {
-		delete strs[i];
-		delete cpystrs[i];
+		delete[] strs[i];
+		delete[] cpystrs[i];
 	}
 }
 
@@ -85,7 +85,7 @@ TEST(strcpy, ascii_characters) {
 		char* cpystr = new char[nstl::strlen(str) + 1];
 		nstl::strcpy(cpystr, str);
 		ASSERT_STREQ(cpystr, str);
-		delete str;
+		delete[] str;
 	}
 }
 
@@ -99,6 +99,6 @@ TEST(strcpy, vs_std_strcpy) {
 		nstl::strcpy(cpystr, str);
 		std::strcpy(cpystr_stl, str);
 		ASSERT_STREQ(cpystr, cpystr_stl);
-		delete str;
+		delete[] str;
 	}
 }
