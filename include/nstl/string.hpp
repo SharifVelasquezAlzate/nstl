@@ -1,5 +1,7 @@
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
+#include <cstring>
 
 #include <nstl/cstring.h>
 
@@ -15,12 +17,13 @@ class string {
 	/*                              TYPES AND STRUCTS                             */
 	/* -------------------------------------------------------------------------- */
 private:
-	enum class Type { SMALL, LARGE };
+	enum class Type : uint8_t { SMALL = 0, LARGE = 1 };
 
 	struct large {
 		char* data;
 		size_t __size = 0;
-		size_t __capacity = 0;
+		size_t __capacity : (8 * sizeof(size_t)) - 1 = 0;
+		Type type : 1;
 	};
 
 private:
@@ -45,6 +48,7 @@ public:
 		set_size(csize);
 
 		if (type == Type::SMALL) {
+			nstl::strcpy(_data, cstr);
 			return;
 		}
 
@@ -70,15 +74,17 @@ public:
 			return;
 		}
 
+		size_t old_size = size();
+
 		if (is_small() && nsize > capacity()) {
 			// Convert to a large string
 			char old_data[__NSTL_MAX_SS_SIZE__ + 1];
-			nstl::strcpy(old_data, _data);
+			memcpy(old_data, _data, old_size + 1);
 
 			set_type_flag(Type::LARGE);
 			set_capacity(nsize);
 			char* new_data = new char[capacity() + 1];
-			nstl::strcpy(new_data, old_data);
+			memcpy(new_data, old_data, old_size + 1);
 
 			ls.data = new_data;
 		}
@@ -86,17 +92,46 @@ public:
 		if (is_large() && nsize > capacity()) {
 			set_capacity(nsize);
 			char* new_data = new char[capacity() + 1];
-			nstl::strcpy(new_data, ls.data);
+			memcpy(new_data, ls.data, old_size + 1);
 
 			delete ls.data;
 			ls.data = new_data;
 		}
 
-		size_t old_size = size();
 		set_size(nsize);
 
 		char* data = is_large() ? ls.data : _data;
 		data[nsize] = '\0';
+	}
+
+	void reserve(size_t ncap) {
+		if (ncap <= capacity()) {
+			return;
+		}
+
+		size_t curr_size = size();
+
+		if (is_small()) {
+			// Convert to large string
+			char old_data[__NSTL_MAX_SS_SIZE__ + 1];
+			memcpy(old_data, _data, curr_size + 1);
+
+			set_type_flag(Type::LARGE);
+			set_capacity(ncap);
+			set_size(curr_size);
+			char* new_data = new char[capacity() + 1];
+			memcpy(new_data, old_data, curr_size + 1);
+
+			ls.data = new_data;
+			return;
+		}
+
+		set_capacity(ncap);
+		char* new_data = new char[capacity() + 1];
+		memcpy(new_data, ls.data, curr_size + 1);
+
+		delete ls.data;
+		ls.data = new_data;
 	}
 
 	const char* c_str() const noexcept {
@@ -121,7 +156,7 @@ public:
 
 private:
 	bool is_large() const noexcept {
-		return ls.__capacity & 1;
+		return ls.type == Type::LARGE;
 	}
 
 	bool is_small() const noexcept {
@@ -129,9 +164,7 @@ private:
 	}
 
 	void set_type_flag(Type type) noexcept {
-		char type_bit = (type == Type::LARGE) ? 1 : 0;
-		ls.__capacity &= ~1UL;
-		ls.__capacity |= type_bit;
+		ls.type = type;
 	}
 
 	void set_size(size_t new_size) {
@@ -148,7 +181,7 @@ private:
 	// Sets it to the nearest odd number that is bigger or equal to new_capacity
 	void set_capacity(size_t new_capacity) {
 		assert(is_large());
-		ls.__capacity = new_capacity | 1;
+		ls.__capacity = new_capacity;
 	}
 
 	/* -------------------------------------------------------------------------- */
