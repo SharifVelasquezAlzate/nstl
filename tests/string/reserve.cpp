@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
+#include <nstl/string.h>
 #include <cstddef>
 #include <cstring>
-#include <nstl/string.hpp>
 
 #include "utils.h"
 

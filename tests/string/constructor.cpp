@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
+#include <nstl/string.h>
 #include <cstring>
-#include <nstl/string.hpp>
 
 #include "utils.h"
 
