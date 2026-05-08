@@ -1,5 +1,6 @@
 #include <nstl/exceptions.h>
 #include <nstl/string.h>
+#include <sys/param.h>
 
 static double GROWTH_FACTOR = 2;
 
@@ -236,7 +237,7 @@ void string::push_back(char c) {
 	append(c);
 }
 
-void string::insert(size_t pos, char c) {
+nstl::string& string::insert(size_t pos, char c) {
 	size_t isize = 1;
 
 	if (size() + isize > capacity()) {
@@ -253,9 +254,11 @@ void string::insert(size_t pos, char c) {
 
 	data()[pos] = c;
 	set_size(size() + isize);
+
+	return *this;
 }
 
-void string::insert(size_t pos, const char* cstr) {
+nstl::string& string::insert(size_t pos, const char* cstr) {
 	size_t isize = nstl::strlen(cstr);
 
 	if (size() + isize > capacity()) {
@@ -272,9 +275,11 @@ void string::insert(size_t pos, const char* cstr) {
 
 	nstl::memcpy(data() + pos, cstr, isize);
 	set_size(size() + isize);
+
+	return *this;
 }
 
-void string::insert(size_t pos, const nstl::string& nstr) {
+nstl::string& string::insert(size_t pos, const nstl::string& nstr) {
 	size_t isize = nstr.size();
 
 	if (size() + isize > capacity()) {
@@ -291,6 +296,35 @@ void string::insert(size_t pos, const nstl::string& nstr) {
 
 	nstl::memcpy(data() + pos, nstr.data(), isize);
 	set_size(size() + isize);
+
+	return *this;
+}
+
+nstl::string& string::erase() {
+	clear();
+	return *this;
+}
+
+nstl::string& string::erase(size_t pos) {
+	if (pos >= size()) {
+		throw excep::out_of_range("position is out of bounds");
+	}
+	return erase(pos, size() - pos);
+}
+
+nstl::string& string::erase(size_t pos, size_t len) {
+	if (pos >= size()) {
+		throw excep::out_of_range("position is out of bounds");
+	}
+
+	len = MIN(len, size() - pos);
+
+	for (size_t i = pos + len; i <= size(); ++i) {
+		data()[i - len] = data()[i];
+	}
+	set_size(size() - len);
+
+	return *this;
 }
 
 const char* string::c_str() const noexcept {

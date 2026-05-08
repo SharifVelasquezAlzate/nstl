@@ -69,12 +69,13 @@ public:
 
 	void push_back(char c);
 
-	// TODO: Assign
-	void assign();
+	nstl::string& insert(size_t pos, char c);
+	nstl::string& insert(size_t pos, const char* cstr);
+	nstl::string& insert(size_t pos, const nstl::string& nstr);
 
-	void insert(size_t pos, char c);
-	void insert(size_t pos, const char* cstr);
-	void insert(size_t pos, const nstl::string& nstr);
+	nstl::string& erase();
+	nstl::string& erase(size_t pos);
+	nstl::string& erase(size_t pos, size_t len);
 
 	const char* c_str() const noexcept;
 	const char* data() const noexcept;
