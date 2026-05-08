@@ -7,7 +7,7 @@
 
 #include "utils/general.h"
 
-TEST(access, random) {
+TEST(string_access, random) {
 	for (size_t iter = 0; iter < 1000; ++iter) {
 		const size_t size = 1 + generate_random_size_t(100000);
 		const char* cstr = generate_random_cstr(size);
@@ -23,13 +23,13 @@ TEST(access, random) {
 	}
 }
 
-TEST(acess, front_back) {
+TEST(string_access, front_back) {
 	nstl::string nstr{};
 	EXPECT_THROW(nstr.front(), nstl::excep::out_of_range);
 	EXPECT_THROW(nstr.back(), nstl::excep::out_of_range);
 }
 
-TEST(access, out_of_range) {
+TEST(string_access, out_of_range) {
 	nstl::string nstr{};
 	EXPECT_THROW(nstr[0], nstl::excep::out_of_range);
 	EXPECT_THROW(nstr.at(0), nstl::excep::out_of_range);
@@ -41,7 +41,7 @@ TEST(access, out_of_range) {
 	EXPECT_THROW(nstr2.at(5), nstl::excep::out_of_range);
 }
 
-TEST(access, out_of_range_random) {
+TEST(string_access, out_of_range_random) {
 	for (size_t iter = 0; iter < 1000; ++iter) {
 		const size_t size = generate_random_size_t(100000);
 		const char* cstr = generate_random_cstr(size);

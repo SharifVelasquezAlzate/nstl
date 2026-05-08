@@ -8,7 +8,7 @@
 
 #include "utils/general.h"
 
-TEST(append, basic_char) {
+TEST(string_append, basic_char) {
 	nstl::string nstr{"Hello"};
 	nstr += 'a';
 	std::string expected = "Helloa";
@@ -24,7 +24,7 @@ TEST(append, basic_char) {
 	ASSERT_EQ(nstr.size(), 7);
 }
 
-TEST(append, cstring) {
+TEST(string_append, cstring) {
 	nstl::string nstr{"Pomme"};
 	nstr += " - Grandiose";
 	char expected[71] = "Pomme - Grandiose";

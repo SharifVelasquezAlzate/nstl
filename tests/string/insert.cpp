@@ -9,7 +9,7 @@
 #include "utils/general.h"
 #include "utils/string.h"
 
-TEST(insert, nstr_basic) {
+TEST(string_insert, nstr_basic) {
 	nstl::string nstr{"Hello"};
 	std::string str{"Hello"};
 
@@ -19,7 +19,7 @@ TEST(insert, nstr_basic) {
 	ASSERT_IDENTICAL(nstr, str);
 }
 
-TEST(insert, char_random) {
+TEST(string_insert, char_random) {
 	for (size_t i = 0; i < 1000; ++i) {
 		size_t size = generate_random_size_t(100000);
 		char* cstr = generate_random_cstr(size);
@@ -41,7 +41,7 @@ TEST(insert, char_random) {
 	}
 }
 
-TEST(insert, cstr_random) {
+TEST(string_insert, cstr_random) {
 	for (size_t i = 0; i < 1000; ++i) {
 		size_t size = generate_random_size_t(100000);
 		char* cstr = generate_random_cstr(size);
@@ -66,7 +66,7 @@ TEST(insert, cstr_random) {
 	}
 }
 
-TEST(insert, nstr_random) {
+TEST(string_insert, nstr_random) {
 	for (size_t i = 0; i < 1000; ++i) {
 		size_t size = generate_random_size_t(100000);
 		char* cstr = generate_random_cstr(size);

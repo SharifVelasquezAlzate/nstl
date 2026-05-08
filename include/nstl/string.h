@@ -61,11 +61,11 @@ public:
 	/* -------------------------------- MODIFIERS ------------------------------- */
 	void operator+=(char c);
 	void operator+=(const char* cstr);
-	void operator+=(const nstl::string& other);
+	void operator+=(const nstl::string& nstr);
 
 	void append(char c);
 	void append(const char* cstr);
-	void append(const nstl::string& other);
+	void append(const nstl::string& nstr);
 
 	void push_back(char c);
 
@@ -76,6 +76,10 @@ public:
 	nstl::string& erase();
 	nstl::string& erase(size_t pos);
 	nstl::string& erase(size_t pos, size_t len);
+
+	nstl::string& replace(size_t pos, size_t len, char c);
+	nstl::string& replace(size_t pos, size_t len, const char* cstr);
+	nstl::string& replace(size_t pos, size_t len, const nstl::string& nstr);
 
 	const char* c_str() const noexcept;
 	const char* data() const noexcept;

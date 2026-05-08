@@ -5,12 +5,12 @@
 
 #include "utils/general.h"
 
-TEST(string_resize, empty_string) {
+TEST(string_reserve, empty_string) {
 	nstl::string nstr{};
 	nstr.reserve(20);
 }
 
-TEST(string_resize, smaller_than_curr_capacity) {
+TEST(string_reserve, smaller_than_curr_capacity) {
 	for (int i = 0; i < 1000; ++i) {
 		size_t ogsize = generate_random_size_t(10000);
 		const char* cstr = generate_random_cstr(ogsize);
@@ -38,7 +38,7 @@ TEST(string_resize, smaller_than_curr_capacity) {
 	}
 }
 
-TEST(string_resize, bigger_than_curr_capacity) {
+TEST(string_reserve, bigger_than_curr_capacity) {
 	for (int i = 0; i < 1000; ++i) {
 		size_t ogsize = generate_random_size_t(10000);
 		const char* cstr = generate_random_cstr(ogsize);

@@ -145,7 +145,7 @@ const char& string::operator[](size_t pos) const {
 }
 
 char& string::at(size_t pos) {
-	if (pos >= size()) {
+	if (pos >= size()) [[unlikely]] {
 		// TODO: Add pos and size() in the error message for improved error detection
 		throw excep::out_of_range("position is out of bounds");
 	}
@@ -154,7 +154,7 @@ char& string::at(size_t pos) {
 }
 
 const char& string::at(size_t pos) const {
-	if (pos >= size()) {
+	if (pos >= size()) [[unlikely]] {
 		// TODO: Add pos and size() in the error message for improved error detection
 		throw excep::out_of_range("position is out of bounds");
 	}
@@ -163,7 +163,7 @@ const char& string::at(size_t pos) const {
 }
 
 char& string::back() {
-	if (size() == 0) {
+	if (size() == 0) [[unlikely]] {
 		// TODO: Add pos and size() in the error message for improved error detection
 		throw excep::out_of_range("position is out of bounds");
 	}
@@ -171,7 +171,7 @@ char& string::back() {
 }
 
 const char& string::back() const {
-	if (size() == 0) {
+	if (size() == 0) [[unlikely]] {
 		// TODO: Add pos and size() in the error message for improved error detection
 		throw excep::out_of_range("position is out of bounds");
 	}
@@ -195,8 +195,8 @@ void string::operator+=(const char* cstr) {
 	append(cstr);
 }
 
-void string::operator+=(const nstl::string& other) {
-	append(other);
+void string::operator+=(const nstl::string& nstr) {
+	append(nstr);
 }
 
 void string::append(char c) {
@@ -221,15 +221,15 @@ void string::append(const char* cstr) {
 	set_size(size() + csize);
 }
 
-void string::append(const nstl::string& other) {
-	size_t osize = other.size();
+void string::append(const nstl::string& nstr) {
+	size_t osize = nstr.size();
 
 	if (size() + osize > capacity()) {
 		size_t ncap = (size() + osize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + osize;
 		reserve(ncap);
 	}
 
-	nstl::memcpy(data() + size(), other.data(), osize);
+	nstl::memcpy(data() + size(), nstr.data(), osize);
 	set_size(size() + osize);
 }
 
@@ -306,14 +306,14 @@ nstl::string& string::erase() {
 }
 
 nstl::string& string::erase(size_t pos) {
-	if (pos >= size()) {
+	if (pos >= size()) [[unlikely]] {
 		throw excep::out_of_range("position is out of bounds");
 	}
 	return erase(pos, size() - pos);
 }
 
 nstl::string& string::erase(size_t pos, size_t len) {
-	if (pos >= size()) {
+	if (pos >= size()) [[unlikely]] {
 		throw excep::out_of_range("position is out of bounds");
 	}
 
@@ -324,6 +324,63 @@ nstl::string& string::erase(size_t pos, size_t len) {
 	}
 	set_size(size() - len);
 
+	return *this;
+}
+
+nstl::string& string::replace(size_t pos, size_t len, char c) {
+	if (pos > size()) [[unlikely]] {
+		throw excep::out_of_range("position is out of bounds");
+	}
+
+	if (pos + len > capacity()) {
+		// TODO: Optimization: perform the necessary replacement as we perform the reserve
+		size_t ncap = (pos + len <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : pos + len;
+		reserve(ncap);
+	}
+
+	for (size_t i = pos; i < pos + len; ++i) {
+		data()[i] = c;
+	}
+
+	set_size(MAX(size(), pos + len));
+	return *this;
+}
+
+nstl::string& string::replace(size_t pos, size_t len, const char* cstr) {
+	if (pos > size()) [[unlikely]] {
+		throw excep::out_of_range("position is out of bounds");
+	}
+
+	if (pos + len > capacity()) {
+		// TODO: Optimization: perform the necessary replacement as we perform the reserve
+		size_t ncap = (pos + len <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : pos + len;
+		reserve(ncap);
+	}
+
+	for (size_t i = pos; i < pos + len; ++i) {
+		data()[i] = cstr[i - pos];
+	}
+
+	set_size(MAX(size(), pos + len));
+	return *this;
+}
+
+nstl::string& string::replace(size_t pos, size_t len, const nstl::string& nstr) {
+	if (pos > size()) [[unlikely]] {
+		throw excep::out_of_range("position is out of bounds");
+	}
+
+	if (pos + len > capacity()) {
+		// TODO: Optimization: perform the necessary replacement as we perform the reserve
+		size_t ncap = (pos + len <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : pos + len;
+		reserve(ncap);
+	}
+
+	for (size_t i = pos; i < pos + len; ++i) {
+		data()[i] = nstr[i - pos];
+	}
+
+	set_size(MAX(size(), pos + len));
 	return *this;
 }
 
