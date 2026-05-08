@@ -13,13 +13,19 @@ I have always liked to understand, and have always been intrigued by the inner w
 
 4. **A never-ending story**: This is, almost by definition, a never-ending project, and thus, something I can always make progress on whenever I want to take a break from another project, or simply feel like coding in my free time.
 
+### Rules
+There are some rules I have decided to adopt for the development of this project. These are:
+
+1. The STL should never be used (this includes C libraries like memcpy, strcpy, etc.), except for tests.
+2. **No AI**: I have decided to not use AI anywhere in the code for this project. The only exception to this is setting up CMake files or metatools of a similar nature.
+
 ### Final thoughts
 
 Thank you for taking the time to read this sort of mini-manifesto :D
 
 Feel free to look at my code, and critique it from as many angles as possible, as there is no better way of learning than listening to other people's perspectives.
 
-I also hope that this project serves as a motivation for YOU, yes, YOU, to delve deeper into the things you've been curious about or have always given for granted: maybe you also want to write your own version of the STL, or create your own game engine, or pdf visualizer, or operating system. No matter what it is, don't hesitate to start learning about it. If it's ever the case you decide to embark on such a project, don't hesitate either to email me a link to your project or profile!
+I also hope that this project serves as a motivation for YOU, yes, YOU, to delve deeper into the things you've been curious about or have always given for granted: maybe you also want to write your own version of the STL, or create your own game engine, or pdf visualizer, or operating system -- no matter what it is, don't hesitate to start learning about it. If it's ever the case you decide to embark on such a project, don't hesitate either to email me a link to your project or profile!
 
 Thank you for your attention, and happy coding!
 
