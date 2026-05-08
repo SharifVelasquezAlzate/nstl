@@ -134,6 +134,12 @@ public:
 		ls.data = new_data;
 	}
 
+	void clear() {
+		set_size(0);
+		char* data = is_large() ? ls.data : _data;
+		data[0] = '\0';
+	}
+
 	const char* c_str() const noexcept {
 		return is_large() ? ls.data : _data;
 	}
