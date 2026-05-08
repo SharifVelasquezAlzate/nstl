@@ -1,6 +1,8 @@
 #include <nstl/exceptions.h>
 #include <nstl/string.h>
 
+static double GROWTH_FACTOR = 2;
+
 namespace nstl {
 
 string::string() {
@@ -132,6 +134,7 @@ void string::shrink_to_fit() {
 	nstl::memcpy(new_data, ls.data, size() + 1);
 }
 
+/* ------------------------ ELEMENT ACCESS OPERATORS ------------------------ */
 char& string::operator[](size_t pos) {
 	return at(pos);
 }
@@ -180,6 +183,57 @@ char& string::front() {
 
 const char& string::front() const {
 	return at(0);
+}
+
+/* -------------------------------- MODIFIERS ------------------------------- */
+void string::operator+=(char c) {
+	append(c);
+}
+
+void string::operator+=(const char* cstr) {
+	append(cstr);
+}
+
+void string::operator+=(const nstl::string& other) {
+	append(other);
+}
+
+void string::append(char c) {
+	if (size() + 1 > capacity()) {
+		reserve(GROWTH_FACTOR * capacity());
+	}
+
+	data()[size()] = c;
+	data()[size() + 1] = '\0';
+	set_size(size() + 1);
+}
+
+void string::append(const char* cstr) {
+	size_t csize = nstl::strlen(cstr);
+
+	if (size() + csize > capacity()) {
+		size_t ncap = (size() + csize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + csize;
+		reserve(ncap);
+	}
+
+	nstl::strcpy(data() + size(), cstr);
+	set_size(size() + csize);
+}
+
+void string::append(const nstl::string& other) {
+	size_t osize = other.size();
+
+	if (size() + osize > capacity()) {
+		size_t ncap = (size() + osize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + osize;
+		reserve(ncap);
+	}
+
+	nstl::memcpy(data() + size(), other.data(), osize);
+	set_size(size() + osize);
+}
+
+void string::push_back(char c) {
+	append(c);
 }
 
 const char* string::c_str() const noexcept {
