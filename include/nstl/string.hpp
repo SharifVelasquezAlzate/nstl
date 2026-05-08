@@ -140,6 +140,10 @@ public:
 		data[0] = '\0';
 	}
 
+	bool empty() {
+		return size() == 0;
+	}
+
 	const char* c_str() const noexcept {
 		return is_large() ? ls.data : _data;
 	}
