@@ -79,12 +79,12 @@ public:
 		if (is_small() && nsize > capacity()) {
 			// Convert to a large string
 			char old_data[__NSTL_MAX_SS_SIZE__ + 1];
-			memcpy(old_data, _data, old_size + 1);
+			nstl::memcpy(old_data, _data, old_size + 1);
 
 			set_type_flag(Type::LARGE);
 			set_capacity(nsize);
 			char* new_data = new char[capacity() + 1];
-			memcpy(new_data, old_data, old_size + 1);
+			nstl::memcpy(new_data, old_data, old_size + 1);
 
 			ls.data = new_data;
 		}
@@ -92,7 +92,7 @@ public:
 		if (is_large() && nsize > capacity()) {
 			set_capacity(nsize);
 			char* new_data = new char[capacity() + 1];
-			memcpy(new_data, ls.data, old_size + 1);
+			nstl::memcpy(new_data, ls.data, old_size + 1);
 
 			delete[] ls.data;
 			ls.data = new_data;
@@ -114,13 +114,13 @@ public:
 		if (is_small()) {
 			// Convert to large string
 			char old_data[__NSTL_MAX_SS_SIZE__ + 1];
-			memcpy(old_data, _data, curr_size + 1);
+			nstl::memcpy(old_data, _data, curr_size + 1);
 
 			set_type_flag(Type::LARGE);
 			set_capacity(ncap);
 			set_size(curr_size);
 			char* new_data = new char[capacity() + 1];
-			memcpy(new_data, old_data, curr_size + 1);
+			nstl::memcpy(new_data, old_data, curr_size + 1);
 
 			ls.data = new_data;
 			return;
@@ -128,7 +128,7 @@ public:
 
 		set_capacity(ncap);
 		char* new_data = new char[capacity() + 1];
-		memcpy(new_data, ls.data, curr_size + 1);
+		nstl::memcpy(new_data, ls.data, curr_size + 1);
 
 		delete[] ls.data;
 		ls.data = new_data;
