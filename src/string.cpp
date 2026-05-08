@@ -158,6 +158,30 @@ const char& string::at(size_t pos) const {
 	return data()[pos];
 }
 
+char& string::back() {
+	if (size() == 0) {
+		// TODO: Add pos and size() in the error message for improved error detection
+		throw excep::out_of_range("position is out of bounds");
+	}
+	return at(size() - 1);
+}
+
+const char& string::back() const {
+	if (size() == 0) {
+		// TODO: Add pos and size() in the error message for improved error detection
+		throw excep::out_of_range("position is out of bounds");
+	}
+	return at(size() - 1);
+}
+
+char& string::front() {
+	return at(0);
+}
+
+const char& string::front() const {
+	return at(0);
+}
+
 const char* string::c_str() const noexcept {
 	return is_large() ? ls.data : _data;
 }

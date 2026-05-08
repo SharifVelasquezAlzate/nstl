@@ -45,10 +45,18 @@ public:
 	bool empty() const noexcept;
 	void shrink_to_fit();
 
+	/* ------------------------ ELEMENT ACCESS OPERATORS ------------------------ */
 	char& operator[](size_t pos);
 	const char& operator[](size_t pos) const;
+
 	char& at(size_t pos);
 	const char& at(size_t pos) const;
+
+	char& back();
+	const char& back() const;
+
+	char& front();
+	const char& front() const;
 
 	const char* c_str() const noexcept;
 	const char* data() const noexcept;
