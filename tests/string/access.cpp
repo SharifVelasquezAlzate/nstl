@@ -5,7 +5,7 @@
 #include <nstl/exceptions.h>
 #include <nstl/string.h>
 
-#include "utils.h"
+#include "utils/general.h"
 
 TEST(access, random) {
 	for (size_t iter = 0; iter < 1000; ++iter) {

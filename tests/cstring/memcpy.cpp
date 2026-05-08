@@ -2,7 +2,7 @@
 #include <nstl/cstring.h>
 #include <cstring>
 
-#include "utils.h"
+#include <utils/general.h>
 
 TEST(memcpy, empty_copy) {
 	{

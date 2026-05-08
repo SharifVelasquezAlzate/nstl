@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstring>
 
-#include "utils.h"
+#include "utils/general.h"
 
 TEST(string_resize, small_to_large_with_null_terminators) {
 	// using namespace std::string_literals;

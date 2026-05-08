@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstring>
 
-#include "utils.h"
+#include "utils/general.h"
 
 TEST(shrink_to_fit, empty) {
 	nstl::string nstr{};

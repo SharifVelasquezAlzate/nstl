@@ -2,7 +2,7 @@
 #include <nstl/cstring.h>
 #include <cstring>
 
-#include "utils.h"
+#include <utils/general.h>
 
 TEST(strlen, basic_test) {
 	const char* strs[15];

@@ -69,6 +69,9 @@ public:
 
 	void push_back(char c);
 
+	// TODO: Assign
+	void assign();
+
 	void insert(size_t pos, char c);
 	void insert(size_t pos, const char* cstr);
 	void insert(size_t pos, const nstl::string& nstr);

@@ -236,6 +236,63 @@ void string::push_back(char c) {
 	append(c);
 }
 
+void string::insert(size_t pos, char c) {
+	size_t isize = 1;
+
+	if (size() + isize > capacity()) {
+		// TODO: Optimization: perform the necessary "copy to the back" as we perform the reserve
+		size_t ncap = (size() + isize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + isize;
+		reserve(ncap);
+	}
+
+	// TODO: Could be more efficient with long method?
+	// Copy to the back all the things that will be shifted
+	for (int i = size() + isize; i >= pos; --i) {
+		data()[i] = data()[i - isize];
+	}
+
+	data()[pos] = c;
+	set_size(size() + isize);
+}
+
+void string::insert(size_t pos, const char* cstr) {
+	size_t isize = nstl::strlen(cstr);
+
+	if (size() + isize > capacity()) {
+		// TODO: Optimization: perform the necessary "copy to the back" as we perform the reserve
+		size_t ncap = (size() + isize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + isize;
+		reserve(ncap);
+	}
+
+	// TODO: Could be more efficient with long method?
+	// Copy to the back all the things that will be shifted
+	for (int i = size() + isize; i >= pos; --i) {
+		data()[i] = data()[i - isize];
+	}
+
+	nstl::memcpy(data() + pos, cstr, isize);
+	set_size(size() + isize);
+}
+
+void string::insert(size_t pos, const nstl::string& nstr) {
+	size_t isize = nstr.size();
+
+	if (size() + isize > capacity()) {
+		// TODO: Optimization: perform the necessary "copy to the back" as we perform the reserve
+		size_t ncap = (size() + isize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + isize;
+		reserve(ncap);
+	}
+
+	// TODO: Could be more efficient with long method?
+	// Copy to the back all the things that will be shifted
+	for (int i = size() + isize; i >= pos; --i) {
+		data()[i] = data()[i - isize];
+	}
+
+	nstl::memcpy(data() + pos, nstr.data(), isize);
+	set_size(size() + isize);
+}
+
 const char* string::c_str() const noexcept {
 	return is_large() ? ls.data : _data;
 }

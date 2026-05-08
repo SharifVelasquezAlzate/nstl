@@ -2,7 +2,7 @@
 #include <nstl/string.h>
 #include <cstring>
 
-#include "utils.h"
+#include "utils/general.h"
 
 TEST(string_ctr, empty_constructor) {
 	nstl::string nstr{};

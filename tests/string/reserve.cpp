@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstring>
 
-#include "utils.h"
+#include "utils/general.h"
 
 TEST(string_resize, empty_string) {
 	nstl::string nstr{};

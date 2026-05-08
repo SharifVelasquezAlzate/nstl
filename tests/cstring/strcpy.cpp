@@ -2,7 +2,7 @@
 #include <nstl/cstring.h>
 #include <cstring>
 
-#include "utils.h"
+#include <utils/general.h>
 
 TEST(strcpy, basic_test) {
 	char* strs[15];

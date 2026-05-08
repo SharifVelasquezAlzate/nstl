@@ -5,11 +5,13 @@ project(nstl_tests)
 include(GoogleTest)
 
 file(GLOB_RECURSE TEST_SOURCES "./**/*.cpp")
+file(GLOB_RECURSE UTILS_SOURCES "./utils/*.cpp")
 
-add_library(test_utils STATIC utils.cpp)
-target_include_directories(test_utils
-PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
+add_library(test_utils STATIC ${UTILS_SOURCES})
+target_include_directories(test_utils PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(test_utils
+    GTest::gtest_main
+    nstl
 )
 
 foreach (TEST_SOURCE ${TEST_SOURCES})

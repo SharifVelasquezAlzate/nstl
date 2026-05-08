@@ -6,7 +6,7 @@
 #include <nstl/exceptions.h>
 #include <nstl/string.h>
 
-#include "utils.h"
+#include "utils/general.h"
 
 TEST(append, basic_char) {
 	nstl::string nstr{"Hello"};
