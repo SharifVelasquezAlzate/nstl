@@ -46,35 +46,32 @@ public:
 	nstl::string& operator=(const nstl::string& other);
 	nstl::string& operator=(nstl::string&& other);
 
-	void resize(size_t nsize);
-	void reserve(size_t ncap);
-	void clear();
-	bool empty() const noexcept;
-	void shrink_to_fit();
-
 	/* ------------------------ ELEMENT ACCESS OPERATORS ------------------------ */
-	char& operator[](size_t pos);
-	const char& operator[](size_t pos) const;
-
 	char& at(size_t pos);
 	const char& at(size_t pos) const;
 
-	char& back();
-	const char& back() const;
+	char& operator[](size_t pos);
+	const char& operator[](size_t pos) const;
 
 	char& front();
 	const char& front() const;
 
+	char& back();
+	const char& back() const;
+
+	const char* data() const noexcept;
+	const char* c_str() const noexcept;
+
+	/* -------------------------------- CAPACITY -------------------------------- */
+	bool empty() const noexcept;
+	size_t size() const noexcept;
+	size_t length() const noexcept;
+	void reserve(size_t ncap);
+	size_t capacity() const noexcept;
+	void shrink_to_fit();
+
 	/* -------------------------------- MODIFIERS ------------------------------- */
-	void operator+=(char c);
-	void operator+=(const char* cstr);
-	void operator+=(const nstl::string& nstr);
-
-	void append(char c);
-	void append(const char* cstr);
-	void append(const nstl::string& nstr);
-
-	void push_back(char c);
+	void clear();
 
 	nstl::string& insert(size_t pos, char c);
 	nstl::string& insert(size_t pos, const char* cstr);
@@ -84,18 +81,57 @@ public:
 	nstl::string& erase(size_t pos);
 	nstl::string& erase(size_t pos, size_t len);
 
+	void push_back(char c);
+	void pop_back();
+
+	void append(char c);
+	void append(const char* cstr);
+	void append(const nstl::string& nstr);
+
+	void operator+=(char c);
+	void operator+=(const char* cstr);
+	void operator+=(const nstl::string& nstr);
+
 	nstl::string& replace(size_t pos, size_t len, char c);
 	nstl::string& replace(size_t pos, size_t len, const char* cstr);
 	nstl::string& replace(size_t pos, size_t len, const nstl::string& nstr);
 
+	size_t copy(char* dest, size_t count, size_t pos = 0) const;
+
+	void resize(size_t nsize);
+
 	void swap(nstl::string& other);
 
-	const char* c_str() const noexcept;
-	const char* data() const noexcept;
+	/* --------------------------------- SEARCH --------------------------------- */
+	constexpr size_t find(const nstl::string& nstr, size_t pos = 0) const;
+	constexpr size_t find(const char* s, size_t pos, size_t count) const;
+	constexpr size_t find(const char* s, size_t pos = 0) const;
+	constexpr size_t find(char ch, size_t pos = 0) const;
 
-	size_t size() const noexcept;
-	size_t length() const noexcept;
-	size_t capacity() const noexcept;
+	constexpr size_t rfind(const nstl::string& nstr, size_t pos = 0) const;
+	constexpr size_t rfind(const char* s, size_t pos, size_t count) const;
+	constexpr size_t rfind(const char* s, size_t pos = 0) const;
+	constexpr size_t rfind(char ch, size_t pos = 0) const;
+
+	constexpr size_t find_first_of(const nstl::string& nstr, size_t pos = 0) const;
+	constexpr size_t find_first_of(const char* s, size_t pos, size_t count) const;
+	constexpr size_t find_first_of(const char* s, size_t pos = 0) const;
+	constexpr size_t find_first_of(char ch, size_t pos = 0) const;
+
+	constexpr size_t find_first_not_of(const nstl::string& nstr, size_t pos = 0) const;
+	constexpr size_t find_first_not_of(const char* s, size_t pos, size_t count) const;
+	constexpr size_t find_first_not_of(const char* s, size_t pos = 0) const;
+	constexpr size_t find_first_not_of(char ch, size_t pos = 0) const;
+
+	constexpr size_t find_last_of(const nstl::string& nstr, size_t pos = 0) const;
+	constexpr size_t find_last_of(const char* s, size_t pos, size_t count) const;
+	constexpr size_t find_last_of(const char* s, size_t pos = 0) const;
+	constexpr size_t find_last_of(char ch, size_t pos = 0) const;
+
+	constexpr size_t find_last_not_of(const nstl::string& nstr, size_t pos = 0) const;
+	constexpr size_t find_last_not_of(const char* s, size_t pos, size_t count) const;
+	constexpr size_t find_last_not_of(const char* s, size_t pos = 0) const;
+	constexpr size_t find_last_not_of(char ch, size_t pos = 0) const;
 
 private:
 	bool is_large() const noexcept;

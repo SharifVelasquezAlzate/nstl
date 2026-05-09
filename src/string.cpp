@@ -105,42 +105,6 @@ string& string::operator=(nstl::string&& other) {
 	return *this;
 }
 
-void string::resize(size_t nsize) {
-	if (nsize <= size()) {
-		set_size(nsize);
-		data()[nsize] = '\0';
-		return;
-	}
-
-	size_t old_size = size();
-
-	if (is_small() && nsize > capacity()) {
-		// Convert to a large string
-		char old_data[__NSTL_MAX_SS_SIZE__ + 1];
-		nstl::memcpy(old_data, _data, old_size + 1);
-
-		set_type_flag(Type::LARGE);
-		set_capacity(nsize);
-		char* new_data = new char[capacity() + 1];
-		nstl::memcpy(new_data, old_data, old_size + 1);
-
-		ls.data = new_data;
-	}
-
-	if (is_large() && nsize > capacity()) {
-		set_capacity(nsize);
-		char* new_data = new char[capacity() + 1];
-		nstl::memcpy(new_data, ls.data, old_size + 1);
-
-		delete[] ls.data;
-		ls.data = new_data;
-	}
-
-	set_size(nsize);
-
-	data()[nsize] = '\0';
-}
-
 void string::reserve(size_t ncap) {
 	if (ncap <= capacity()) {
 		return;
@@ -171,11 +135,6 @@ void string::reserve(size_t ncap) {
 	ls.data = new_data;
 }
 
-void string::clear() {
-	set_size(0);
-	data()[0] = '\0';
-}
-
 bool string::empty() const noexcept {
 	return size() == 0;
 }
@@ -202,14 +161,6 @@ void string::shrink_to_fit() {
 }
 
 /* ------------------------ ELEMENT ACCESS OPERATORS ------------------------ */
-char& string::operator[](size_t pos) {
-	return at(pos);
-}
-
-const char& string::operator[](size_t pos) const {
-	return at(pos);
-}
-
 char& string::at(size_t pos) {
 	if (pos >= size()) [[unlikely]] {
 		// TODO: Add pos and size() in the error message for improved error detection
@@ -228,6 +179,22 @@ const char& string::at(size_t pos) const {
 	return data()[pos];
 }
 
+char& string::operator[](size_t pos) {
+	return at(pos);
+}
+
+const char& string::operator[](size_t pos) const {
+	return at(pos);
+}
+
+char& string::front() {
+	return at(0);
+}
+
+const char& string::front() const {
+	return at(0);
+}
+
 char& string::back() {
 	if (size() == 0) [[unlikely]] {
 		// TODO: Add pos and size() in the error message for improved error detection
@@ -244,63 +211,22 @@ const char& string::back() const {
 	return at(size() - 1);
 }
 
-char& string::front() {
-	return at(0);
+const char* string::c_str() const noexcept {
+	return is_large() ? ls.data : _data;
 }
 
-const char& string::front() const {
-	return at(0);
+const char* string::data() const noexcept {
+	return c_str();
+}
+
+char* string::data() noexcept {
+	return is_large() ? ls.data : _data;
 }
 
 /* -------------------------------- MODIFIERS ------------------------------- */
-void string::operator+=(char c) {
-	append(c);
-}
-
-void string::operator+=(const char* cstr) {
-	append(cstr);
-}
-
-void string::operator+=(const nstl::string& nstr) {
-	append(nstr);
-}
-
-void string::append(char c) {
-	if (size() + 1 > capacity()) {
-		reserve(GROWTH_FACTOR * capacity());
-	}
-
-	data()[size()] = c;
-	data()[size() + 1] = '\0';
-	set_size(size() + 1);
-}
-
-void string::append(const char* cstr) {
-	size_t csize = nstl::strlen(cstr);
-
-	if (size() + csize > capacity()) {
-		size_t ncap = (size() + csize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + csize;
-		reserve(ncap);
-	}
-
-	nstl::strcpy(data() + size(), cstr);
-	set_size(size() + csize);
-}
-
-void string::append(const nstl::string& nstr) {
-	size_t osize = nstr.size();
-
-	if (size() + osize > capacity()) {
-		size_t ncap = (size() + osize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + osize;
-		reserve(ncap);
-	}
-
-	nstl::memcpy(data() + size(), nstr.data(), osize);
-	set_size(size() + osize);
-}
-
-void string::push_back(char c) {
-	append(c);
+void string::clear() {
+	set_size(0);
+	data()[0] = '\0';
 }
 
 nstl::string& string::insert(size_t pos, char c) {
@@ -393,6 +319,61 @@ nstl::string& string::erase(size_t pos, size_t len) {
 	return *this;
 }
 
+void string::push_back(char c) {
+	append(c);
+}
+
+void string::pop_back() {
+	set_size(size() - 1);
+	data()[size()] = '\0';
+}
+
+void string::append(char c) {
+	if (size() + 1 > capacity()) {
+		reserve(GROWTH_FACTOR * capacity());
+	}
+
+	data()[size()] = c;
+	data()[size() + 1] = '\0';
+	set_size(size() + 1);
+}
+
+void string::append(const char* cstr) {
+	size_t csize = nstl::strlen(cstr);
+
+	if (size() + csize > capacity()) {
+		size_t ncap = (size() + csize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + csize;
+		reserve(ncap);
+	}
+
+	nstl::strcpy(data() + size(), cstr);
+	set_size(size() + csize);
+}
+
+void string::append(const nstl::string& nstr) {
+	size_t osize = nstr.size();
+
+	if (size() + osize > capacity()) {
+		size_t ncap = (size() + osize <= GROWTH_FACTOR * capacity()) ? GROWTH_FACTOR * capacity() : size() + osize;
+		reserve(ncap);
+	}
+
+	nstl::memcpy(data() + size(), nstr.data(), osize);
+	set_size(size() + osize);
+}
+
+void string::operator+=(char c) {
+	append(c);
+}
+
+void string::operator+=(const char* cstr) {
+	append(cstr);
+}
+
+void string::operator+=(const nstl::string& nstr) {
+	append(nstr);
+}
+
 nstl::string& string::replace(size_t pos, size_t len, char c) {
 	if (pos > size()) [[unlikely]] {
 		throw excep::out_of_range("position is out of bounds");
@@ -450,22 +431,51 @@ nstl::string& string::replace(size_t pos, size_t len, const nstl::string& nstr) 
 	return *this;
 }
 
+size_t copy(char* dest, size_t count, size_t pos = 0) {
+	// TODO
+	return 0;
+}
+
+void string::resize(size_t nsize) {
+	if (nsize <= size()) {
+		set_size(nsize);
+		data()[nsize] = '\0';
+		return;
+	}
+
+	size_t old_size = size();
+
+	if (is_small() && nsize > capacity()) {
+		// Convert to a large string
+		char old_data[__NSTL_MAX_SS_SIZE__ + 1];
+		nstl::memcpy(old_data, _data, old_size + 1);
+
+		set_type_flag(Type::LARGE);
+		set_capacity(nsize);
+		char* new_data = new char[capacity() + 1];
+		nstl::memcpy(new_data, old_data, old_size + 1);
+
+		ls.data = new_data;
+	}
+
+	if (is_large() && nsize > capacity()) {
+		set_capacity(nsize);
+		char* new_data = new char[capacity() + 1];
+		nstl::memcpy(new_data, ls.data, old_size + 1);
+
+		delete[] ls.data;
+		ls.data = new_data;
+	}
+
+	set_size(nsize);
+
+	data()[nsize] = '\0';
+}
+
 void string::swap(nstl::string& other) {
 	nstl::string tmp{nstl::move(other)};
 	other = nstl::move(*this);
 	*this = nstl::move(tmp);
-}
-
-const char* string::c_str() const noexcept {
-	return is_large() ? ls.data : _data;
-}
-
-const char* string::data() const noexcept {
-	return c_str();
-}
-
-char* string::data() noexcept {
-	return is_large() ? ls.data : _data;
 }
 
 size_t string::size() const noexcept {
