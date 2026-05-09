@@ -77,8 +77,7 @@ public:
 	nstl::string& insert(size_t pos, const char* cstr);
 	nstl::string& insert(size_t pos, const nstl::string& nstr);
 
-	nstl::string& erase();
-	nstl::string& erase(size_t pos);
+	nstl::string& erase(size_t pos = 0);
 	nstl::string& erase(size_t pos, size_t len);
 
 	void push_back(char c);

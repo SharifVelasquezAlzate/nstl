@@ -292,20 +292,12 @@ nstl::string& string::insert(size_t pos, const nstl::string& nstr) {
 	return *this;
 }
 
-nstl::string& string::erase() {
-	clear();
-	return *this;
-}
-
 nstl::string& string::erase(size_t pos) {
-	if (pos >= size()) [[unlikely]] {
-		throw excep::out_of_range("position is out of bounds");
-	}
-	return erase(pos, size() - pos);
+	return erase(pos, size());
 }
 
 nstl::string& string::erase(size_t pos, size_t len) {
-	if (pos >= size()) [[unlikely]] {
+	if (pos > size()) [[unlikely]] {
 		throw excep::out_of_range("position is out of bounds");
 	}
 
@@ -431,8 +423,8 @@ nstl::string& string::replace(size_t pos, size_t len, const nstl::string& nstr) 
 	return *this;
 }
 
-size_t copy(char* dest, size_t count, size_t pos = 0) {
-	// TODO
+size_t string::copy(char* dest, size_t count, size_t pos) const {
+	count = MIN(count, size());
 	return 0;
 }
 
