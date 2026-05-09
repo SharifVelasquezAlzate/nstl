@@ -1,6 +1,8 @@
 #include <nstl/exceptions.h>
 #include <nstl/string.h>
 #include <sys/param.h>
+#include <cstring>
+#include "nstl/cstring.h"
 
 static double GROWTH_FACTOR = 2;
 
@@ -28,7 +30,15 @@ string::string(const char* cstr) {
 	// Defer work: only allocate more space when something is actually appended to this string
 	set_capacity(csize);
 	ls.data = new char[capacity() + 1];
-	nstl::strcpy(ls.data, cstr);
+	nstl::memcpy(ls.data, cstr, csize + 1);
+}
+
+string::string(const nstl::string& other) : string() {
+	*this = other;
+}
+
+string::string(nstl::string&& other) : string() {
+	*this = nstl::move(other);
 }
 
 string::~string() {
@@ -37,6 +47,62 @@ string::~string() {
 	}
 
 	delete[] ls.data;
+}
+
+string& string::operator=(const char* cstr) {
+	if (is_large()) {
+		delete[] ls.data;
+	}
+
+	size_t csize = nstl::strlen(cstr);
+	Type type = (csize > __NSTL_MAX_SS_SIZE__) ? Type::LARGE : Type::SMALL;
+
+	set_type_flag(type);
+	set_size(csize);
+
+	if (type == Type::SMALL) {
+		nstl::strcpy(_data, cstr);
+		return *this;
+	}
+
+	// Defer work: only allocate more space when something is actually appended to this string
+	set_capacity(csize);
+	ls.data = new char[capacity() + 1];
+	nstl::strcpy(ls.data, cstr);
+
+	return *this;
+}
+
+string& string::operator=(const nstl::string& other) {
+	if (is_large()) {
+		delete[] ls.data;
+	}
+
+	memcpy(_data, other._data, __NSTL_MAX_SS_SIZE__ + 1);
+
+	if (is_small()) {
+		return *this;
+	}
+
+	char* databuf = new char[capacity() + 1];
+	nstl::memcpy(databuf, other.ls.data, other.size() + 1);
+	ls.data = databuf;
+
+	return *this;
+}
+
+string& string::operator=(nstl::string&& other) {
+	if (is_large()) {
+		delete[] ls.data;
+	}
+
+	memcpy(_data, other._data, __NSTL_MAX_SS_SIZE__ + 1);
+	other.ls.type = Type::LARGE;
+	other.ls.data = nullptr;
+	other.ls.__size = 0;
+	other.ls.__capacity = 0;
+
+	return *this;
 }
 
 void string::resize(size_t nsize) {
@@ -382,6 +448,12 @@ nstl::string& string::replace(size_t pos, size_t len, const nstl::string& nstr) 
 
 	set_size(MAX(size(), pos + len));
 	return *this;
+}
+
+void string::swap(nstl::string& other) {
+	nstl::string tmp{nstl::move(other)};
+	other = nstl::move(*this);
+	*this = nstl::move(tmp);
 }
 
 const char* string::c_str() const noexcept {

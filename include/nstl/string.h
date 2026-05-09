@@ -6,6 +6,7 @@
 #include <cstring>
 
 #include <nstl/cstring.h>
+#include <nstl/utility.hpp>
 
 #define __NSTL_MAX_SS_SIZE__ (sizeof(large) - 1)
 
@@ -22,7 +23,7 @@ private:
 	enum class Type : uint8_t { SMALL = 0, LARGE = 1 };
 
 	struct large {
-		char* data;
+		char* data = nullptr;
 		size_t __size = 0;
 		size_t __capacity : (8 * sizeof(size_t)) - 1 = 0;
 		Type type : 1;
@@ -36,8 +37,14 @@ public:
 
 	string();
 	string(const char* cstr);
+	string(const nstl::string& other);
+	string(nstl::string&& other);
 
 	~string();
+
+	nstl::string& operator=(const char* cstr);
+	nstl::string& operator=(const nstl::string& other);
+	nstl::string& operator=(nstl::string&& other);
 
 	void resize(size_t nsize);
 	void reserve(size_t ncap);
@@ -80,6 +87,8 @@ public:
 	nstl::string& replace(size_t pos, size_t len, char c);
 	nstl::string& replace(size_t pos, size_t len, const char* cstr);
 	nstl::string& replace(size_t pos, size_t len, const nstl::string& nstr);
+
+	void swap(nstl::string& other);
 
 	const char* c_str() const noexcept;
 	const char* data() const noexcept;
