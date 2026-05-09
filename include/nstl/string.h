@@ -95,7 +95,7 @@ public:
 	nstl::string& replace(size_t pos, size_t len, const char* cstr);
 	nstl::string& replace(size_t pos, size_t len, const nstl::string& nstr);
 
-	size_t copy(char* dest, size_t count, size_t pos = 0) const;
+	constexpr size_t copy(char* dest, size_t count, size_t pos = 0) const;
 
 	void resize(size_t nsize);
 

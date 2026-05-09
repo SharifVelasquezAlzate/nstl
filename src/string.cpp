@@ -423,9 +423,19 @@ nstl::string& string::replace(size_t pos, size_t len, const nstl::string& nstr) 
 	return *this;
 }
 
-size_t string::copy(char* dest, size_t count, size_t pos) const {
-	count = MIN(count, size());
-	return 0;
+constexpr size_t string::copy(char* dest, size_t count, size_t pos) const {
+	if (pos > size()) {
+		throw excep::out_of_range("position is out of bounds");
+	}
+
+	count = MIN(count, size() - pos);
+
+	// TODO: Potential optimization -- use unsigned long method
+	for (int i = pos; i < pos + count; ++i) {
+		dest[i] = data()[i];
+	}
+
+	return count;
 }
 
 void string::resize(size_t nsize) {
