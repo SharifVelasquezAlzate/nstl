@@ -102,8 +102,8 @@ public:
 	void swap(nstl::string& other);
 
 	/* --------------------------------- SEARCH --------------------------------- */
-	constexpr size_t find(const nstl::string& nstr, size_t pos = 0) const;
-	constexpr size_t find(const char* s, size_t pos, size_t count) const;
+	size_t find(const nstl::string& nstr, size_t pos = 0) const;
+	/*constexpr size_t find(const char* s, size_t pos, size_t count) const;
 	constexpr size_t find(const char* s, size_t pos = 0) const;
 	constexpr size_t find(char ch, size_t pos = 0) const;
 
@@ -130,7 +130,7 @@ public:
 	constexpr size_t find_last_not_of(const nstl::string& nstr, size_t pos = 0) const;
 	constexpr size_t find_last_not_of(const char* s, size_t pos, size_t count) const;
 	constexpr size_t find_last_not_of(const char* s, size_t pos = 0) const;
-	constexpr size_t find_last_not_of(char ch, size_t pos = 0) const;
+	constexpr size_t find_last_not_of(char ch, size_t pos = 0) const;*/
 
 private:
 	bool is_large() const noexcept;

@@ -480,6 +480,60 @@ void string::swap(nstl::string& other) {
 	*this = nstl::move(tmp);
 }
 
+/* --------------------------------- SEARCH --------------------------------- */
+size_t string::find(const nstl::string& pat, size_t pos) const {
+	// TODO: Put back this line: if (pat.size() > size()) return UNDEFINED;
+	if (pat.size() == 0) return 0;
+
+	// Boyer-Moore Algorithm
+	size_t soffset = 0;
+	size_t poffset;
+
+	size_t badchar_tb[256] = {static_cast<size_t>(-1)};
+	size_t gsuff_tb[pat.size()];
+
+	// Pre-processing
+	// Bad character table
+	for (size_t i = 0; i < pat.size(); ++i) {
+		badchar_tb[(unsigned char)pat[i]] = i;
+	}
+
+	// Good suffix table
+	// Construct border table
+	gsuff_tb[pat.size() - 1] = 0;
+	for (size_t i = pat.size() - 2; i-- > 0 && pat.size() > 1;) {
+		if (pat[i] == pat[pat.size() - 1 - gsuff_tb[i+1]]) {
+			gsuff_tb[i] =  gsuff_tb[i+1] + 1;
+			continue;
+		}
+	}
+
+	
+
+	// Search
+	while (pat.size() <= size() - soffset) {
+		poffset = pat.size() - 1;
+
+		bool match = false;
+		while (pat[poffset] == this->at(soffset + poffset)) {
+			if (poffset == 0) {
+				match = true;
+				break;
+			}
+			--poffset;
+		}
+
+		if (match) {
+			return soffset;
+		}
+
+		soffset += (poffset > badchar_tb[this->at(soffset + poffset)]) ? poffset - badchar_tb[this->at(soffset + poffset)] : 1;
+	}
+
+	//! TODO: Potential overflow
+	return size() + 1;
+}
+
 size_t string::size() const noexcept {
 	return is_large() ? ls.__size : (23 - (size_t)(_data[__NSTL_MAX_SS_SIZE__] >> 2));
 }
